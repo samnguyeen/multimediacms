@@ -8,6 +8,7 @@ services:
       args:
         - DEVELOPMENT_MODE=True
     image: mediacms/mediacms-dev:latest
+    entrypoint: ["./deploy/docker/entrypoint-dev.sh"]
     volumes:
       - ./:/home/mediacms.io/mediacms/
     command: "./deploy/docker/prestart.sh"
@@ -63,6 +64,7 @@ services:
     restart: unless-stopped
   web:
     image: mediacms/mediacms-dev:latest
+    entrypoint: ["./deploy/docker/entrypoint-dev.sh"]
     command: "python manage.py runserver 0.0.0.0:80"
     environment:
       DEVELOPMENT_MODE: 'True'
@@ -99,6 +101,7 @@ services:
       retries: 3
   celery_worker:
     image: mediacms/mediacms-dev:latest
+    entrypoint: ["./deploy/docker/entrypoint-dev.sh"]
     deploy:
       replicas: 1
     volumes:
