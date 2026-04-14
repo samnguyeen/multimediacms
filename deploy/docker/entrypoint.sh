@@ -21,7 +21,7 @@ else
 fi
 # In development mode the project directory is a host bind-mount, so chowning
 # to www-data would remove the host user's write access. Skip in that case.
-if [ "$DEVELOPMENT_MODE" != "True" ]; then
+if [ "${DEVELOPMENT_MODE,,}" != "true" ]; then
     # We should do this only for folders that have a different owner, since it is an expensive operation
     # Also ignoring .git folder to fix this issue https://github.com/mediacms-io/mediacms/issues/934
     # Exclude package-lock.json files that may not exist or be removed during frontend setup
