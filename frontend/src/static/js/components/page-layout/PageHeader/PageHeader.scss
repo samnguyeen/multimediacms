@@ -1,34 +1,14 @@
 @import '../../../../css/includes/_variables.scss';
 @import '../../../../css/includes/_variables_dimensions.scss';
 
-.page-header {
-  background-color: var(--header-bg-color);
+/* ═══════════════════════════════════════════════════════════════════════════
+   Page header — frosted-glass navbar
+   Three explicit flex children (left / center / right) own the layout.
+   Heroicons replace Material Icons; all styling uses custom SCSS tokens.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-  .circle-icon-button {
-    color: var(--header-circle-button-color);
-  }
-
-  .page-header-right {
-    .popup {
-      .nav-menu {
-        li {
-          color: var(--header-popup-menu-color);
-
-          .material-icons {
-            color: var(--header-popup-menu-icon-color);
-          }
-
-          &.link-item {
-            a {
-              color: var(--header-popup-menu-color);
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
+/* ── HeroUI v3 icon-button resets ───────────────────────────────────────── */
+/* (kept for backward-compat naming; now applies to native <button> elements) */
 .page-header {
   z-index: 9999;
   position: fixed;
@@ -37,241 +17,118 @@
   right: 0;
   height: var(--header-height);
 
-  display: table;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
 
-  &:after {
+  @media screen and (min-width: 710px) {
+    padding: 0 16px;
+  }
+
+  /* Subtle drop-shadow below the navbar */
+  &::after {
     content: '';
     position: absolute;
     bottom: -5px;
-    right: 0;
-    width: 100%;
-    height: 5px;
     left: 0;
-    opacity: 1;
+    right: 0;
+    height: 5px;
     pointer-events: none;
-    box-shadow: inset 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
+    box-shadow: inset 0 4px 8px -3px rgba(17, 17, 17, 0.08);
   }
 }
 
-.page-header-left,
-.page-header-right {
-  position: absolute;
-  top: 0;
-  width: auto;
-  height: 100%;
-  display: table;
+/* ── Dark mode — frosted-glass navbar ───────────────────────────────────── */
+body.dark_theme .page-header {
+  background-color: rgba(10, 12, 22, 0.75);
+  backdrop-filter: saturate(160%) blur(16px);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 
-  display: table-cell;
+  &::after { box-shadow: inset 0 4px 12px -3px rgba(0, 0, 0, 0.55); }
+}
 
-  > * {
-    display: table;
-    height: 100%;
-    height: var(--header-height);
+/* ── Light mode — clean translucent white ───────────────────────────────── */
+body:not(.dark_theme) .page-header {
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
 
-    > * {
-      height: 100%;
-      display: table-cell;
-      vertical-align: middle;
-    }
+/* ── Three-column flex layout ───────────────────────────────────────────── */
+.page-header-left  { flex: 0 0 auto; }
+.page-header-center { flex: 1 1 auto; max-width: 520px; margin: 0 auto; }
+.page-header-right { flex: 0 0 auto; margin-left: auto; }
+
+.header-left-inner,
+.header-right-inner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--header-height);
+}
+
+/* ── HeroUI v3 icon-button resets ───────────────────────────────────────── */
+.header-icon-btn {
+  color: var(--header-circle-button-color, currentColor) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 9999px !important;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-color: rgba(128, 128, 128, 0.12) !important;
   }
 }
 
-.page-header-right {
-  padding-right: $header-padding-horizontal;
-
-  @media screen and (max-width: 709px) {
-    padding-right: 8px;
-  }
+/* ── Auth buttons (Sign in / Register) ─────────────────────────────────── */
+.header-auth-btn {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  border-radius: 999px !important;
+  padding: 6px 16px !important;
+  height: auto !important;
+  line-height: 1 !important;
+  letter-spacing: 0.01em;
 }
 
-.page-header-left {
-  left: 0;
-  padding-right: 104px;
+.sign-in.header-auth-btn {
+  color: var(--default-brand-color) !important;
+  border: 1px solid var(--default-brand-color) !important;
+  background: transparent !important;
 
-  > * > * {
-    padding-left: 8px;
-
-    @media screen and (min-width: 710px) {
-      padding-left: 16px;
-    }
-  }
-
-  > * > * {
-    padding-right: 16px;
-  }
+  &:hover { background: rgba(0, 153, 51, 0.08) !important; }
 }
 
-@media screen and (min-width: 640px) and (max-width: 1023px) {
-  .page-header-left {
-    max-width: 55%;
-  }
+.header-register-btn.header-auth-btn {
+  color: #fff !important;
+  background: var(--default-brand-color) !important;
+  border: 1px solid var(--default-brand-color) !important;
 
-  .page-header-right {
-    max-width: 45%;
-  }
+  &:hover { opacity: 0.9; }
 }
 
-$__button-link-vertical-padding: 10;
-$__button-link-horizontal-padding: 16;
-
-.page-header-right {
-  right: 0;
-
-  > * > * {
-    padding-right: 8px;
-    padding-right: 6px;
-
-    @media screen and (max-width: 368px) {
-      padding-right: 0;
-    }
-  }
-
-  .button-link {
-    padding: ($__button-link-vertical-padding * 1px) ($__button-link-horizontal-padding * 1px);
-  }
-
-  .popup {
-    position: absolute;
-    top: 100%;
-    right: 8px;
-    margin-top: -8px;
-    max-width: calc(100vw - 38px);
-
-    @media screen and (max-width: 1007px) {
-      right: 16px;
-    }
-
-    @media screen and (max-width: 479px) {
-      right: 16px;
-    }
-
-    @media screen and (max-width: 359px) {
-      right: 12px;
-    }
-
-    @media screen and (min-width: 1007px) {
-      .anonymous-user & {
-        right: 0;
-      }
-    }
-  }
-}
-
-.mobile-search-toggle {
-  @media screen and (min-width: 1024px) {
-    display: none;
-  }
-}
-
-.user-thumb {
-  padding: 0;
-}
-
-.user-thumb,
-.user-options {
-  @media screen and (min-width: 1008px) {
-    position: relative; // Changes popup position.
-  }
-}
-
-.user-thumb {
-  width: 48px;
-
-  @media screen and (min-width: 768px) {
-    width: 60px;
-  }
-
-  text-align: center;
-}
-
-.sign-in-wrap,
-.register-wrap {
-  padding: 0;
-}
-
-.button-link.sign-in,
-.button-link.register-link {
-  color: var(--brand-color, var(--default-brand-color));
-  font-weight: 500;
-  line-height: 1;
-  display: block;
-  text-transform: uppercase;
-}
-
-.signin-icon-link {
-  color: var(--brand-color, var(--default-brand-color));
-}
-
-.close-search-field {
-  display: none;
-}
-
-a.user-menu-top-link {
-  display: table;
-  padding: 8px;
-  color: inherit;
-  text-decoration: none;
-
-  &:focus {
-    outline: var(--dotted-outline);
-  }
-
-  > * {
-    display: table-cell;
-    vertical-align: middle;
-
-    &:first-child {
-      width: 56px;
-    }
-
-    &:last-child {
-    }
-
-    .username {
-      display: block;
-      font-weight: 500;
-      line-height: 1.25;
-    }
-
-    .videos-count {
-      display: block;
-      line-height: 1.5;
-      font-size: 0.875em;
-    }
-  }
-}
-
+/* ── Logo ───────────────────────────────────────────────────────────────── */
 .logo {
   padding: 0;
   margin: 0;
-
   font-size: 1.25em;
   font-weight: 300;
-
-  @media screen and (max-width: 359px) {
-    font-size: 1em;
-  }
 
   a {
     color: inherit;
     display: block;
-
-    &:focus {
-      span {
-        &:before {
-          content: '';
-          display: block;
-          position: absolute;
-          top: -2px;
-          left: -2px;
-          right: -2px;
-          bottom: -2px;
-          border: 1px dotted var(--body-text-color);
-          opacity: 0.5;
-        }
-      }
-    }
   }
 
   span {
@@ -289,51 +146,78 @@ a.user-menu-top-link {
   }
 }
 
+/* ── Search field ───────────────────────────────────────────────────────── */
+.search-field-wrap {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+/* ── Popup positioning ──────────────────────────────────────────────────── */
+.user-thumb,
+.user-options {
+  position: relative;
+
+  .popup {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    max-width: calc(100vw - 38px);
+  }
+}
+
+/* ── User menu top-link ─────────────────────────────────────────────────── */
+a.user-menu-top-link {
+  display: table;
+  padding: 8px;
+  color: inherit;
+  text-decoration: none;
+
+  &:focus { outline: var(--dotted-outline); }
+
+  > * {
+    display: table-cell;
+    vertical-align: middle;
+
+    &:first-child { width: 56px; }
+
+    .username    { display: block; font-weight: 500; line-height: 1.25; }
+    .videos-count { display: block; line-height: 1.5; font-size: 0.875em; }
+  }
+}
+
+/* ── Popup colours (inherits from existing theme tokens) ─────────────────── */
+.page-header .popup .nav-menu li {
+  color: var(--header-popup-menu-color);
+
+  .material-icons, svg { color: var(--header-popup-menu-icon-color); }
+
+  &.link-item a { color: var(--header-popup-menu-color); }
+}
+
+/* ── Mobile: search-toggle visible only on mobile ────────────────────────── */
+.mobile-search-toggle {
+  @media screen and (min-width: 1024px) { display: none !important; }
+}
+
+.close-search-field { display: none; }
+
+/* ── Mobile-search-field mode ───────────────────────────────────────────── */
 @media screen and (max-width: 1023px) {
   .mobile-search-field {
     .toggle-sidebar,
     .logo,
-    .page-header-right {
-      display: none;
-    }
+    .page-header-right { display: none; }
 
     .close-search-field {
-      display: table-cell;
-
-      padding-left: 8px;
-      padding-right: 8px;
-
-      @media screen and (min-width: 710px) {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
+      display: flex !important;
     }
 
-    .page-header-left {
-      position: relative;
-      top: auto;
-      left: auto;
-      float: left;
+    .page-header-center {
+      max-width: none !important;
+      flex: 1 !important;
     }
-  }
-}
-
-@media screen and (max-width: 709px) {
-  .mobile-search-field {
-    .close-search-field {
-      padding-left: 4px;
-    }
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .toggle-sidebar {
-    padding-right: 8px;
-  }
-}
-
-@media screen and (max-width: 359px) {
-  .toggle-sidebar {
-    padding-right: 4px;
   }
 }

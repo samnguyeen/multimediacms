@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import '@fontsource/twinkle-star';
 import { useLayout } from '../../utils/hooks/';
 import { PageStore } from '../../utils/stores/';
 import { SidebarNavigationMenu } from './sidebar/SidebarNavigationMenu';

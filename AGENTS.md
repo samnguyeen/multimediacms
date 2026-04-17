@@ -1,6 +1,6 @@
 # 🤖 AGENTS.md — AI Agent Master Instruction File
 
-> **Version:** 1.0.0
+> **Version:** 1.1.0
 > **Project:** `multimediacms` (MediaCMS)
 > **Architecture:** Headless Django API + scripted background jobs (Celery) + Redis + PostgreSQL
 > **Last Updated:** 2026-04-14
@@ -189,7 +189,130 @@ Upload media via API/admin/script
   - `cp -r frontend/dist/static/* static/`
   - `docker compose -f docker-compose-dev.yaml restart web`
 
-## ✅ 11. Testing & Quality Standards
+### 🖥️ Frontend Dev Server (`:8088`) vs Django Static Build (`:80`)
+
+Understanding which port to use and why is critical for efficient development.
+
+#### Frontend Dev Server — `http://localhost:8088`
+
+- Served by `npm run start` inside the `frontend` container via `mediacms-scripts` (webpack-dev-server)
+- Reads live from `frontend/src/` — **no build step required**
+- Supports **hot module replacement (HMR)**: file saves appear in the browser within seconds automatically
+- JS/CSS are served directly by the webpack dev server, **not** through Django
+- Only calls Django's `/api/v1/*` endpoints for data
+- Django-specific features (session auth, CSRF, form POSTs, admin) still require port `:80`
+- **Use during development** to preview React UI changes instantly
+
+```text
+Browser :8088
+  → webpack-dev-server (frontend container)
+      → reads live from frontend/src/
+      → fetches data from Django :80 /api/v1/*
+```
+
+#### Django-Served Static Build — `http://localhost:80`
+
+- Served by `python manage.py runserver` in dev (uWSGI + nginx in production)
+- Serves **compiled bundles** from `static/` — output of `npm run dist` copied via `cp -r frontend/dist/static/* static/`
+- **No hot reload** — source changes require a full rebuild + copy + Django restart
+- Renders full Django templates (auth, CSRF, session, admin, permissions all work correctly)
+- This is the **final truth** before committing — identical to what users see in production
+
+```text
+Browser :80
+  → Django runserver
+      → renders templates/cms/index.html
+          → loads static/js/home.js (compiled bundle)
+              → calls /api/v1/* for data
+```
+
+#### Side-by-side Comparison
+
+| | Dev Server `:8088` | Django Static `:80` |
+|---|---|---|
+| **Source** | Live `frontend/src/` | Compiled `static/` bundles |
+| **Hot reload** | ✅ Instant (HMR) | ❌ Manual rebuild required |
+| **Auth / CSRF / session** | ❌ Limited | ✅ Full Django behaviour |
+| **Django templates** | ❌ Not rendered | ✅ Full template rendering |
+| **Always reflects latest code** | ✅ Yes | ❌ Only after `npm run dist` + copy |
+| **Used for** | Fast UI iteration | Final verification + production |
+
+#### Recommended Development Workflow
+
+```text
+Edit frontend/src/
+      ↓
+Check on :8088          ← fast, instant hot reload
+      ↓
+Happy with result?
+      ↓
+npm run dist            ← compile to static/
+cp -r frontend/dist/static/* static/
+docker compose -f docker-compose-dev.yaml restart web
+      ↓
+Verify on :80           ← final confirmation before commit
+```
+
+> **Rule:** Always do a final check on `:80` before committing frontend changes.
+> The dev server at `:8088` is your fast feedback loop; `:80` is your final truth.
+
+---
+
+## 🚀 11. Production Build Workflow
+
+The production build is a **separate process** that runs after development is complete and all changes have been verified on the dev stack.
+
+### When to Trigger
+
+- All feature/bug-fix development is finished and verified at `http://localhost:80` on the dev stack
+- All tests pass (see Section 12 — Testing & Quality Standards)
+- Code has been reviewed and merged to the production branch
+
+### Build Steps
+
+```bash
+# 1. Compile the React frontend into optimised static bundles
+docker compose -f docker-compose-dev.yaml exec frontend npm run dist
+
+# 2. Copy compiled assets into the Django static directory
+cp -r frontend/dist/static/* static/
+
+# 3. Collect static files for production serving
+docker compose -f docker-compose-dev.yaml exec web python manage.py collectstatic --noinput
+
+# 4. Build the production Docker image
+docker compose -f docker-compose.yaml build
+
+# 5. Start the production stack
+docker compose -f docker-compose.yaml up -d
+```
+
+### Production vs Development Stack
+
+| | Development (`docker-compose-dev.yaml`) | Production (`docker-compose.yaml`) |
+|---|---|---|
+| **Web server** | Django `runserver` | uWSGI + nginx |
+| **Static files** | Served by Django dev server | Served directly by nginx |
+| **Frontend** | webpack-dev-server HMR at `:8088` | Pre-compiled bundles only |
+| **Debug mode** | `DEBUG=True` | `DEBUG=False` |
+| **Purpose** | Local iteration | Live deployment |
+
+### Production Checklist
+
+- [ ] All tests pass on the dev stack
+- [ ] Frontend verified at `http://localhost:80` (static build)
+- [ ] `npm run dist` compiled without errors
+- [ ] `collectstatic` ran successfully
+- [ ] Environment variables / secrets set for production (`.env` or secrets manager)
+- [ ] Database migrations applied (`python manage.py migrate`)
+- [ ] Production image built and smoke-tested before full rollout
+
+> **Do not** use `docker-compose-dev.yaml` for production deployments.
+> The production compose file (`docker-compose.yaml`) uses hardened settings, nginx, and uWSGI.
+
+---
+
+## ✅ 12. Testing & Quality Standards
 
 - Backend tests run with eager Celery via `TESTING=True`
 - Canonical backend test command:

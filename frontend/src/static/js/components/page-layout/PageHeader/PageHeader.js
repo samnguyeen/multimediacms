@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+/* Inter Variable font — imported as JS so webpack resolves woff2 URLs correctly */
+import '@fontsource-variable/inter';
 import { PageStore } from '../../../utils/stores/';
 import { useUser, useLayout } from '../../../utils/hooks/';
 import { addClassname } from '../../../utils/helpers/';
@@ -13,9 +15,7 @@ import '../PageMain.scss';
 function Alerts() {
   function onClickAlertClose() {
     const alertElem = this.parentNode;
-
     addClassname(alertElem, 'hiding');
-
     setTimeout(
       function () {
         if (alertElem && alertElem.parentNode) {
@@ -29,7 +29,6 @@ function Alerts() {
   setTimeout(
     function () {
       const closeBtn = document.querySelectorAll('.alert.alert-dismissible .close');
-
       let i;
       if (closeBtn.length) {
         i = 0;
@@ -40,43 +39,52 @@ function Alerts() {
       }
     }.bind(this),
     1000
-  ); // TODO: Improve this.
+  );
 }
 
 function MediaUploader() {
-  let uploaderWrap = document.querySelector('.media-uploader-wrap');
-
+  const uploaderWrap = document.querySelector('.media-uploader-wrap');
   if (uploaderWrap) {
-    let preUploadMsgEl = document.createElement('div');
-
-    preUploadMsgEl.setAttribute('class', 'pre-upload-msg');
-    preUploadMsgEl.innerHTML = PageStore.get('config-contents').uploader.belowUploadArea;
-
-    uploaderWrap.appendChild(preUploadMsgEl);
+    const el = document.createElement('div');
+    el.setAttribute('class', 'pre-upload-msg');
+    el.innerHTML = PageStore.get('config-contents').uploader.belowUploadArea;
+    uploaderWrap.appendChild(el);
   }
 }
 
-export function PageHeader(props) {
+export function PageHeader() {
   const { isAnonymous } = useUser();
   const { visibleMobileSearch } = useLayout();
 
   useEffect(() => {
     Alerts();
-
     if (void 0 === PageStore.get('current-page') || 'add-media' === PageStore.get('current-page')) {
       MediaUploader();
     }
   }, []);
 
+  const baseClass = [
+    'page-header',
+    visibleMobileSearch ? 'mobile-search-field' : '',
+    isAnonymous       ? 'anonymous-user'        : '',
+  ].filter(Boolean).join(' ');
+
   return (
-    <header
-      className={
-        'page-header' + (visibleMobileSearch ? ' mobile-search-field' : '') + (isAnonymous ? ' anonymous-user' : '')
-      }
-    >
-      <HeaderLeft />
-      <SearchField />
-      <HeaderRight />
+    <header className={baseClass}>
+      {/* ── Left: sidebar toggle + logo ──────────────────────────────────── */}
+      <div className="page-header-left">
+        <HeaderLeft />
+      </div>
+
+      {/* ── Centre: search ───────────────────────────────────────────────── */}
+      <div className="page-header-center">
+        <SearchField />
+      </div>
+
+      {/* ── Right: upload · theme switch · user menu ─────────────────────── */}
+      <div className="page-header-right">
+        <HeaderRight />
+      </div>
     </header>
   );
 }

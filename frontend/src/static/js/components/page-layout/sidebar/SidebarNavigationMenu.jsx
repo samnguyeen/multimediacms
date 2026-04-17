@@ -6,6 +6,8 @@ import { LinksContext, SidebarContext } from '../../../utils/contexts/';
 import { NavigationMenuList } from '../../_shared';
 import { translateString } from '../../../utils/helpers/';
 
+const SIDEBAR_MENU_CLASS = 'sidebar-font-menu';
+
 export function SidebarNavigationMenu() {
   const { userCan, isAnonymous, pages: userPages } = useUser();
 
@@ -126,7 +128,7 @@ export function SidebarNavigationMenu() {
       });
     });
 
-    return items.length ? <NavigationMenuList key="main-first" items={formatItems(items)} /> : null;
+    return items.length ? <NavigationMenuList key="main-first" className={SIDEBAR_MENU_CLASS} items={formatItems(items)} /> : null;
   }
 
   function MainMenuSecondSection() {
@@ -161,7 +163,7 @@ export function SidebarNavigationMenu() {
       }
     }
 
-    return items.length ? <NavigationMenuList key="main-second" items={formatItems(items)} /> : null;
+    return items.length ? <NavigationMenuList key="main-second" className={SIDEBAR_MENU_CLASS} items={formatItems(items)} /> : null;
   }
 
   function UserMenuSection() {
@@ -189,7 +191,7 @@ export function SidebarNavigationMenu() {
       });
     }
 
-    return items.length ? <NavigationMenuList key="user" items={formatItems(items)} /> : null;
+    return items.length ? <NavigationMenuList key="user" className={SIDEBAR_MENU_CLASS} items={formatItems(items)} /> : null;
   }
 
   function CustomMenuSection() {
@@ -223,7 +225,7 @@ export function SidebarNavigationMenu() {
       className: 'nav-item-language',
     });
 
-    return items.length ? <NavigationMenuList key="custom" items={formatItems(items)} /> : null;
+    return items.length ? <NavigationMenuList key="custom" className={SIDEBAR_MENU_CLASS} items={formatItems(items)} /> : null;
   }
 
   function AdminMenuSection() {
@@ -256,7 +258,7 @@ export function SidebarNavigationMenu() {
       });
     }
 
-    return items.length ? <NavigationMenuList key="admin" items={formatItems(items)} /> : null;
+    return items.length ? <NavigationMenuList key="admin" className={SIDEBAR_MENU_CLASS} items={formatItems(items)} /> : null;
   }
 
   return [MainMenuFirstSection(), MainMenuSecondSection(), UserMenuSection(), CustomMenuSection(), AdminMenuSection()];

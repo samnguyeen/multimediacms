@@ -60,8 +60,10 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     if ('dark' === themeMode) {
       addClassname(document.body, 'dark_theme');
+      addClassname(document.body, 'dark'); // HeroUI dark-mode selector
     } else {
       removeClassname(document.body, 'dark_theme');
+      removeClassname(document.body, 'dark'); // HeroUI dark-mode selector
     }
     cache.set('mode', themeMode);
     setLogo(logos[themeMode]);

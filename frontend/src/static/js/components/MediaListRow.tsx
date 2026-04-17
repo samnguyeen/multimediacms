@@ -2,6 +2,7 @@ import React from 'react';
 import { MediaListHeader } from './MediaListHeader';
 
 interface MediaListRowProps {
+  id?: string;
   title?: string;
   viewAllLink?: string;
   viewAllText?: string;
@@ -10,12 +11,10 @@ interface MediaListRowProps {
   children?: React.ReactNode;
 }
 
-export const MediaListRow: React.FC<MediaListRowProps> = (props:any) => {
+export const MediaListRow: React.FC<MediaListRowProps> = (props: any) => {
   return (
-    <div className={(props.className ? props.className + ' ' : '') + 'media-list-row'} style={props.style}>
-      {props.title ? (
-        <MediaListHeader title={props.title} viewAllLink={props.viewAllLink} viewAllText={props.viewAllText} />
-      ) : null}
+    <div id={props.id} className={(props.className ? props.className + ' ' : '') + 'media-list-row'} style={props.style}>
+      {props.title ? <MediaListHeader title={props.title} viewAllLink={props.viewAllLink} viewAllText={props.viewAllText} /> : null}
       {props.children || null}
     </div>
   );

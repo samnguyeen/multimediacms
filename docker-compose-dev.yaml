@@ -39,11 +39,13 @@ services:
     working_dir: /home/mediacms.io/mediacms/frontend/
     command: >
       bash -c "
+      npm config set registry https://registry.npmmirror.com &&
       if [ ! -f node_modules/.install-complete ]; then
         echo 'Installing dependencies...' &&
-        npm install --legacy-peer-deps --cache /home/node/.npm &&
+        npm install --legacy-peer-deps --cache /home/node/.npm --registry=https://registry.npmmirror.com &&
         cd packages/scripts &&
-        npm install --legacy-peer-deps --cache /home/node/.npm &&
+        npm config set registry https://registry.npmmirror.com &&
+        npm install --legacy-peer-deps --cache /home/node/.npm --registry=https://registry.npmmirror.com &&
         npm run build &&
         cd ../.. &&
         touch node_modules/.install-complete

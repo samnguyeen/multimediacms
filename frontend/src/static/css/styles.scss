@@ -24,6 +24,13 @@ body {
   color: var(--body-text-color);
   background-color: var(--body-bg-color);
 
+  /* ── Atmospheric background gradient ──────────────────────────────────── */
+  /* Layered radial glows sit above the flat base colour.                    */
+  /* background-attachment: fixed keeps the gradient anchored to the        */
+  /* viewport so content scrolls over it — creating cinematic depth.        */
+  background-image: var(--body-bg-gradient, none);
+  background-attachment: var(--body-bg-attachment, scroll);
+
   transition-property: overflow;
   transition-duration: 0.2s;
   transition-timing-function: linear;
@@ -579,7 +586,9 @@ button {
 }
 
 .empty-media .button-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 13px 16px 11px;
   font-size: 13px;
   line-height: 1;
@@ -590,10 +599,273 @@ button {
   border-color: var(--default-brand-color);
   background-color: var(--default-brand-color);
 }
-.empty-media .button-link .material-icons {
-  margin-right: 8px;
-  margin-top: -1px;
-  font-size: 17px;
+
+// Heroicon SVG sizing — replaces old .material-icons rule
+.empty-media .button-link .home-hero-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.home-modern-page {
+  padding-top: 16px;
+  font-family: 'Twinkle Star', 'InterVariable', 'Inter', sans-serif;
+
+  @media screen and (min-width: 900px) {
+    padding-top: 24px;
+  }
+}
+
+.home-modern-page .media-list-body,
+.home-modern-page .media-list-body * {
+  font-family: inherit;
+}
+
+.home-modern-hero__eyebrow,
+.home-modern-hero h1,
+.home-modern-hero__subtitle,
+.home-modern-chip,
+.home-modern-page .home-modern-section .media-list-header,
+.home-modern-page .home-modern-section .media-list-header h2,
+.home-modern-page .home-modern-section .media-list-header h3,
+.home-modern-page .home-modern-section .media-list-header a,
+.home-modern-empty-media,
+.home-modern-empty-media .welcome-title,
+.home-modern-empty-media .start-uploading,
+.home-modern-empty-media .button-link {
+  font-family: 'Twinkle Star', 'InterVariable', 'Inter', sans-serif;
+}
+
+.home-modern-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto 20px;
+  padding: 20px;
+  background-color: var(--header-bg-color);
+  border: 1px solid var(--media-list-row-border-color);
+  border-radius: 14px;
+
+  @media screen and (min-width: 900px) {
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+}
+
+.home-modern-hero__eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--item-meta-text-color);
+}
+
+.home-modern-hero h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+
+  @media screen and (min-width: 900px) {
+    font-size: 34px;
+  }
+}
+
+.home-modern-hero__subtitle {
+  margin: 10px 0 0;
+  max-width: 760px;
+  color: var(--item-meta-text-color);
+}
+
+.home-modern-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.home-modern-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--media-list-row-border-color);
+  background-color: transparent;
+  color: var(--body-text-color);
+  font-size: 13px;
   line-height: 1;
-  opacity: 0.65;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    border-color: var(--default-brand-color);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .home-hero-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+}
+
+.home-modern-chip--primary {
+  color: #fff;
+  background-color: var(--default-brand-color);
+  border-color: var(--default-brand-color);
+
+  &:hover,
+  &:focus {
+    color: #fff;
+    background-color: var(--default-brand-color);
+    border-color: var(--default-brand-color);
+    opacity: 0.92;
+  }
+}
+
+.home-modern-page .home-modern-section {
+  margin-bottom: 18px;
+  padding: 6px 0 2px;
+  border-radius: 12px;
+  background-color: var(--header-bg-color);
+  border: 1px solid var(--media-list-row-border-color);
+
+  @media screen and (min-width: 900px) {
+    margin-bottom: 20px;
+  }
+}
+
+.home-modern-page .home-modern-section .media-list-header {
+  padding: 10px 14px;
+
+  h2 {
+    font-size: 18px;
+    margin: 8px 0;
+  }
+
+  h3 a {
+    margin-right: 4px;
+  }
+}
+
+.home-modern-empty-media {
+  margin-top: 8px;
+  padding: 56px 24px;
+  border: 1px solid var(--media-list-row-border-color);
+  background-color: var(--header-bg-color);
+  border-radius: 12px;
+}
+
+.home-modern-empty-media .welcome-title {
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.home-modern-empty-media .button-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+
+  .home-hero-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEEP-SPACE DARK THEME — Homepage glass-card layer
+   Applied on top of the atmospheric body gradient defined in _dark_theme.scss
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.dark_theme {
+
+  /* ── Hero card ─────────────────────────────────────────────────────────── */
+  .home-modern-hero {
+    background: linear-gradient(
+      135deg,
+      rgba(14, 16, 28, 0.82) 0%,
+      rgba(10, 11, 22, 0.65) 100%
+    );
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-color: rgba(100, 48, 240, 0.22);
+    box-shadow:
+      0 0 0 1px rgba(100, 48, 240, 0.1),
+      0 12px 48px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+    /* Faint inner-top shimmer line */
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(100, 48, 240, 0.35) 50%,
+        transparent 100%
+      );
+      border-radius: 999px;
+      pointer-events: none;
+    }
+  }
+
+  /* Needed so ::before positions correctly */
+  .home-modern-hero {
+    position: relative;
+  }
+
+  /* ── Section cards (Featured / Recommended / Latest) ───────────────────── */
+  .home-modern-page .home-modern-section {
+    background: rgba(10, 12, 22, 0.60);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  /* ── Empty media welcome state ─────────────────────────────────────────── */
+  .home-modern-empty-media {
+    background: rgba(10, 12, 22, 0.60);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-color: rgba(100, 48, 240, 0.18);
+    box-shadow:
+      0 0 0 1px rgba(100, 48, 240, 0.07),
+      0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ── Nav chips — elevated active/hover states ──────────────────────────── */
+  .home-modern-chip {
+    border-color: rgba(255, 255, 255, 0.12);
+
+    &:hover,
+    &:focus {
+      border-color: rgba(100, 48, 240, 0.55);
+      background-color: rgba(100, 48, 240, 0.1);
+    }
+  }
+
+  .home-modern-chip--primary {
+    background-color: rgba(100, 48, 240, 0.85);
+    border-color: rgba(100, 48, 240, 0.9);
+    box-shadow: 0 2px 12px rgba(100, 48, 240, 0.35);
+
+    &:hover,
+    &:focus {
+      background-color: rgba(100, 48, 240, 0.85);
+      border-color: rgba(100, 48, 240, 0.9);
+      opacity: 0.92;
+    }
+  }
 }

@@ -1,0 +1,1 @@
+export default __webpack_public_path__ + "./home/mediacms.io/mediacms/frontend/node_modules/@fontsource-variable/inter/files/inter-cyrillic-wght-normal.woff2";

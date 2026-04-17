@@ -1,6 +1,12 @@
 body {
   --body-text-color: #111;
-  --body-bg-color: #fafafa;
+  --body-bg-color: #f3f6fc;
+
+  /* Deep background gradient — subtle cool tints for visual depth */
+  --body-bg-gradient:
+    radial-gradient(ellipse 75% 45% at 88% 0%,   rgba(100, 80, 240, 0.05) 0%, transparent 68%),
+    radial-gradient(ellipse 55% 35% at 6%  96%,  rgba(0,  140, 180, 0.05) 0%, transparent 62%);
+  --body-bg-attachment: fixed;
 
   --hr-color: #e1e1e1;
 

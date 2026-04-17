@@ -1,3 +1,4 @@
+export * from './useBulkActions';
 export * from './useItem';
 export * from './useItemList';
 export * from './useItemListInlineSlider';
@@ -10,4 +11,3 @@ export * from './useMediaItem';
 export * from './usePopup';
 export * from './useTheme';
 export * from './useUser';
-export * from './useBulkActions';

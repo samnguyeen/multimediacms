@@ -95,8 +95,9 @@ NavigationMenuListItem.defaultProps = {
 
 export function NavigationMenuList(props) {
   const menuItems = props.items.map((item, index) => <NavigationMenuListItem key={index} {...item} />);
+  const className = 'nav-menu' + (props.removeVerticalPadding ? ' pv0' : '') + (props.className ? ' ' + props.className : '');
   return menuItems.length ? (
-    <div className={'nav-menu' + (props.removeVerticalPadding ? ' pv0' : '')}>
+    <div className={className}>
       <nav>
         <ul>{menuItems}</ul>
       </nav>
@@ -106,9 +107,11 @@ export function NavigationMenuList(props) {
 
 NavigationMenuList.propTypes = {
   removeVerticalPadding: PropTypes.bool,
+  className: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.shape(NavigationMenuListItem.propTypes)).isRequired,
 };
 
 NavigationMenuList.defaultProps = {
   removeVerticalPadding: false,
+  className: '',
 };

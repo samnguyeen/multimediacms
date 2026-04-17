@@ -1,8 +1,19 @@
 body.dark_theme {
   --body-text-color: rgba(255, 255, 255, 0.88);
-  --body-bg-color: #121212;
+  --body-bg-color: #07090f;
 
-  --hr-color: #2a2a2a;
+  /* ── Deep-space atmospheric background ────────────────────────────────── */
+  /* Three radial glows layered over the near-black base:                    */
+  /*   1. Top-right  — indigo/violet  (suggests a distant light source)      */
+  /*   2. Bottom-left — deep teal     (cool contrast anchor)                 */
+  /*   3. Centre     — muted purple   (adds interior depth / mystery)        */
+  --body-bg-gradient:
+    radial-gradient(ellipse 75% 52% at 84%  -3%,  rgba(100, 48, 240, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 42% at  6%  96%,  rgba(0,  158, 188, 0.13) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 36% at 50%  56%,  rgba(74,  20, 142, 0.08) 0%, transparent 72%);
+  --body-bg-attachment: fixed;
+
+  --hr-color: #1e2030;
 
   --dotted-outline-color: rgba(255, 255, 255, 0.4);
 
@@ -14,7 +25,7 @@ body.dark_theme {
 
   /* ################################################## */
 
-  --header-bg-color: #272727;
+  --header-bg-color: #0d1019;
 
   --header-circle-button-color: #fff;
 
@@ -23,7 +34,7 @@ body.dark_theme {
 
   /* ################################################## */
 
-  --sidebar-bg-color: #1c1c1c;
+  --sidebar-bg-color: #0a0d18;
 
   --sidebar-nav-border-color: rgba(255, 255, 255, 0.1);
 

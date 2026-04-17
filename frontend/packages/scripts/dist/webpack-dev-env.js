@@ -568,7 +568,7 @@ function webpackPlugins(env, srcDir, pages, cssSrc) {
     }
     ret.push(new VirtualModulesPlugin(virtualPages));
     ret.push(new MiniCssExtractPlugin({
-        ignoreOrder: true,
+        ignoreOrder: true, // TODO: Remove it...
         // filename: ! is_build ? '[name].css' : '[name].[hash].css',
         // chunkFilename: ! is_build ? '[id].css' : '[id].[hash].css',
         filename: cssSrc + '[name].css',
@@ -582,7 +582,7 @@ function webpackPlugins(env, srcDir, pages, cssSrc) {
     }
     if ('production' === env) {
         ret.push(new CssMinimizerPlugin({
-            cache: true,
+            cache: true, // TODO: Ignore in Webpack 5. Use https://webpack.js.org/configuration/other-options/#cache.
             minimizerOptions: {
                 preset: [
                     'default',
